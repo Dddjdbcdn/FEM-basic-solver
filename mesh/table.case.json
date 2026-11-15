@@ -1,0 +1,32 @@
+{
+  "mesh": "table.msh",
+  "material": {
+    "young": 70000.0,
+    "poisson": 0.3
+  },
+  "constraints": [
+    {
+      "select": {
+        "group": "feet"
+      },
+      "displacement": [
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "loads": [
+    {
+      "select": {
+        "group": "front_left_leg"
+      },
+      "force": [
+        0,
+        -1000,
+        0
+      ],
+      "distribution": "total"
+    }
+  ]
+}

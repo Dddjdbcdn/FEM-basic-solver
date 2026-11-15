@@ -1,0 +1,192 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Bonded box FEM model",
+  "type": "object",
+  "description": "Axis-aligned rectangular solids in metres, joined through faces.",
+  "required": [
+    "mesh_size",
+    "parts"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "units": {
+      "const": "m"
+    },
+    "parameters": {
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/scalar"
+      }
+    },
+    "mesh_size": {
+      "$ref": "#/$defs/scalar"
+    },
+    "parts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "origin",
+          "size"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "origin": {
+            "$ref": "#/$defs/vector"
+          },
+          "size": {
+            "$ref": "#/$defs/vector"
+          }
+        }
+      }
+    },
+    "groups": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "parts",
+          "face"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "parts": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "string"
+            }
+          },
+          "face": {
+            "enum": [
+              "xmin",
+              "xmax",
+              "ymin",
+              "ymax",
+              "zmin",
+              "zmax"
+            ]
+          }
+        }
+      }
+    },
+    "material": {
+      "type": "object",
+      "required": [
+        "young",
+        "poisson"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "young": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "poisson": {
+          "type": "number",
+          "exclusiveMinimum": -1,
+          "exclusiveMaximum": 0.5
+        }
+      }
+    },
+    "constraints": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "select",
+          "displacement"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "select": {
+            "$ref": "#/$defs/select"
+          },
+          "displacement": {
+            "type": "array",
+            "items": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "minItems": 3,
+            "maxItems": 3
+          }
+        }
+      }
+    },
+    "loads": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "select",
+          "force"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "select": {
+            "$ref": "#/$defs/select"
+          },
+          "force": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3
+          },
+          "distribution": {
+            "enum": [
+              "total",
+              "per_node"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "scalar": {
+      "type": [
+        "number",
+        "string"
+      ],
+      "description": "Number or arithmetic using named parameters."
+    },
+    "vector": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/scalar"
+      },
+      "minItems": 3,
+      "maxItems": 3
+    },
+    "select": {
+      "type": "object",
+      "required": [
+        "group"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "group": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

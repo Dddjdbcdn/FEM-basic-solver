@@ -1,0 +1,11 @@
+{
+  "mesh": "cantilever.msh",
+  "material": {"young": 70000000000.0, "poisson": 0.3},
+  "constraints": [
+    {"select": {"axis": "x", "at": "min"}, "displacement": [0.0, null, null]},
+    {"select": {"axis": "y", "at": "min"}, "displacement": [null, 0.0, null]},
+    {"select": {"axis": "z", "at": "min"}, "displacement": [null, null, 0.0]},
+    {"select": {"axis": "x", "at": "max"}, "displacement": [0.001, null, null]}
+  ],
+  "loads": []
+}
